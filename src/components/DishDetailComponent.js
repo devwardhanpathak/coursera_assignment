@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import CommnetForm from './CommentForm';
+import CommentForm from './CommentForm';
 
 function RenderDish({ dish }) {
     return (
@@ -32,6 +34,7 @@ function RenderComments({ comments }) {
             <ul className="list-unstyled">
                 {commentList}
             </ul>
+            <CommentForm />
         </div>
     );
 }
