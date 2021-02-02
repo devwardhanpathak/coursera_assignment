@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button,
-    Modal, ModalHeader, ModalBody, Row, Col, Label
-} from 'reactstrap';
+import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Row, Col, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
@@ -20,13 +17,13 @@ function RenderDish({ dish }) {
     );
 }
 
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
     var commentList = comments.map(comment => {
         return (
             <li key={comment.id} >
                 {comment.comment}
                 <br /><br />
-                    -- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}
+                -- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}
                 <br /><br />
             </li>
         );
@@ -38,7 +35,7 @@ function RenderComments({ comments, addComment, dishId }) {
             <ul className="list-unstyled">
                 {commentList}
             </ul>
-            <CommentForm dishId={dishId} addComment={addComment} />
+            <CommentForm dishId={dishId} postComment={postComment} />
         </div>
     );
 }
@@ -62,7 +59,7 @@ const DishDetail = props => {
             </div>
         );
     }
-    else if (props.dish != null) {
+    else if (props.dish) {
         return (
             <div className="container">
                 <div className="row">
@@ -76,13 +73,11 @@ const DishDetail = props => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-md-5">
+                    <div className="col-12 col-md-5 m-1">
                         <RenderDish dish={props.dish} />
                     </div>
-                    <div className="col-md-5">
-                        <RenderComments comments={props.comments}
-                            addComment={props.addComment}
-                            dishId={props.dish.id} />
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderComments comments={props.comments} postComment={props.postComment} dishId={props.dish.id} />
                     </div>
                 </div>
             </div>
@@ -122,7 +117,7 @@ export class CommentForm extends Component {
     handleSubmit(values) {
         this.toggleModal();
 
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
     render() {
@@ -162,8 +157,8 @@ export class CommentForm extends Component {
                                     <Row className="form-group">
                                         <Label htmlFor="feedback" md={2}>Your feedback</Label>
                                         <Col md={10}>
-                                            <Control.textarea model=".message" id="message" name="message" rows="6" className="form-control" validators={{ required }} />
-                                            <Errors className="text-danger" model=".message" show="touched" messages={{ required: 'Required' }} />
+                                            <Control.textarea model=".comment" id="comment" name="comment" rows="6" className="form-control" validators={{ required }} />
+                                            <Errors className="text-danger" model=".comment" show="touched" messages={{ required: 'Required' }} />
                                         </Col>
                                     </Row>
 
