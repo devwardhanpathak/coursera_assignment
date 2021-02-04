@@ -1,33 +1,50 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function About(props) {
 
-
-    const RenderLeader = ({ leader }) => {
+    const leaders = props.leaders.leaders.map(leader => {
         return (
             <div key={leader.id} className="col-12 mt-5">
-                <Media tag="li">
-                    <Media left middle>
-                        <Media object src={leader.image} alt={leader.name} />
-                    </Media>
-                    <Media body className="ml-5">
-                        <Media heading>{leader.name}</Media>
-                        <p>{leader.designation}</p>
-                        <p>{leader.description}</p>
-                    </Media>
-                </Media>
+                <RenderLeader leader={leader} />
             </div>
         );
-    };
-
-
-    const leader = props.leaders.map((leader) => {
-        return (
-            <RenderLeader leader={leader} />
-        );
     });
+
+    function RenderLeader({ leader }) {
+        return (
+            <Media tag="li">
+                <Media left middle>
+                    <Media object src={baseUrl + leader.image} alt={leader.name} />
+                </Media>
+                <Media body className="ml-5">
+                    <Media heading>{leader.name}</Media>
+                    <p>{leader.designation}</p>
+                    <p>{leader.description}</p>
+                </Media>
+            </Media>
+        );
+    }
+
+    function RenderLeaders() {
+
+        if (props.leaders.isLoading) {
+            return <Loading />;
+        }
+        else if (props.leaders.errMess) {
+            return (
+                <h4>{props.leaders.errMess}</h4>
+            );
+        }
+        else return (
+            <Media list>
+                {leaders}
+            </Media>
+        );
+    }
 
     return (
         <div className="container">
@@ -84,9 +101,7 @@ function About(props) {
                     <h2>Corporate Leadership</h2>
                 </div>
                 <div className="col-12">
-                    <Media list>
-                        {leader}
-                    </Media>
+                    <RenderLeaders />
                 </div>
             </div>
         </div>
